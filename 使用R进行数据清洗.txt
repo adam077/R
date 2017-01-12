@@ -1,0 +1,53 @@
+使用R进行数据清洗
+
+loan=data.frame(read.csv('loan.csv',header = 1))
+这样一来loan成为了一个表格
+loan.csv是在默认路径的文件，可以getwd()查看，当然也可以用setwd()来设置路径
+
+head(loan)
+可以查看前5行，当然也可以加参数查看更多
+
+duplicated(loan$member_id)
+#查看特定列是否有重复，（false就是不重复）那么这个选项是否可以省略，直接进行下面操作
+loan=unique(loan)
+#这一步是重要的，删除重复值，返回唯一值列表
+
+head(is.na(loan),n = 10)
+#查找数据表中的空值，这个是看10行，当然可以看所有
+is.na(loan$loan_amnt)
+#这是loan_amnt列的空值情况，然后用0代替
+loan[is.na(loan)] <- 0
+＃另外一种很粗暴的方法是删除有空值的行：loan<-na.omit(loan)
+
+loan$loan_status=tolower(loan$loan_status)
+#将贷款状态转换为小写，这样可以方便精确汇总
+table(loan$loan_status)
+#按贷款状态进行汇总，就是求哪些种类有几个啦，其实只是想查看一下
+
+
+install.packages('raster')
+首先安装一个包
+library(raster)
+加载这个包
+loan_status=as.vector(loan$loan_status)
+把loan_status一列变成向量
+loan_s=trim(loan_status)
+这个包里面有个trim函数可以删除向量里面的空格
+loan$loan_status=loan_s
+再把这个向量重新覆盖掉原来的那一列
+table(loan$loan_status)
+再查看一下汇总情况
+
+typeof(loan$annual_inc)
+#查看用户收入字段的数据类型
+loan$annual_inc=as.integer(loan$annual_inc)
+#将用户收入字段更改为integer
+
+term=as.vector(loan$term)
+把term那一列变成向量
+strsplit(term,' ')
+然后用空格进行分列，但感觉这个用excel分裂比较好
+month=substr(loan$issue_d,4,6)
+把loan_issue这一列的中的元素的第4-6位提取出来设为month
+head(cbind(month,loan))
+然后把month和loan合并，并查看

@@ -1,0 +1,13 @@
+#输入x，判断与10的大小
+#if else方法
+x<-scan('');
+if(x<10){print('它小于10')}else if(x==10){print('它等于10')}else{print('它大于10')}
+
+#ifelse方法
+x<-scan('');
+ifelse(x<10,'它小于10',ifelse(x==10,'它等于10','它大于10'))
+
+#switch方法
+switch(sign((x<-scan(''))-10)+2,'它小于10','它等于10','它大于10')
+
+那么如果用readline()如何呢？
